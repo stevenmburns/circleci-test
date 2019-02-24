@@ -516,5 +516,4 @@ def test_hard_limited():
   s.solver.conf_budget(1000)
   s.solver.prop_budget(1000)
   s.solve_limited()
-#  assert s.state == 'UNKNOWN'
-  assert s.state == 'UNSAT'
+  assert s.state == 'UNKNOWN'
