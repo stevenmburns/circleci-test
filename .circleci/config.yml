@@ -1,17 +1,19 @@
-version: 2.1
+version: 2
 
-orbs:
-    hello: circleci/hello-build@0.0.7 # uses the circleci/buildpack-deps Docker image
-
-workflows:
-    "Hello Workflow":
-        jobs:
-          - hello/hello-build
 
 jobs:
   build:
-    docker: # use the docker executor type; machine and macos executors are also supported
+    docker:
       - image: ubuntu:latest # the primary container, where your job's commands are run
+
     steps:
       - checkout # check out the code in the project directory
-      - run: echo "hello world" # run the `echo` command
+      - run: docker build -t stevenmburns/tally_image .
+
+  test:
+    docker:
+      - image: stevenmburns/tally_image
+
+    steps:
+      - checkout
+      - run: docker run stevenmburns/tally_image bash -c "source /general/bin/activate && pytest -- /sympy/lib/python3.6/site-packages/tally/tally.py"
