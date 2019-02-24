@@ -4,16 +4,11 @@ version: 2
 jobs:
   build:
     docker:
-      - image: ubuntu:latest # the primary container, where your job's commands are run
-
-    steps:
-      - checkout # check out the code in the project directory
-      - run: docker build -t stevenmburns/tally_image .
-
-  test:
-    docker:
-      - image: stevenmburns/tally_image
+      - image: docker:17.05.0-ec-git
 
     steps:
       - checkout
+      - setup_remote_docker
+      - run: docker build -t stevenmburns/tally_image .
+
       - run: docker run stevenmburns/tally_image bash -c "source /general/bin/activate && pytest -- /sympy/lib/python3.6/site-packages/tally/tally.py"
