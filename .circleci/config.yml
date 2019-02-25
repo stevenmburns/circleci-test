@@ -13,3 +13,5 @@ jobs:
       - run: docker build -t stevenmburns/tally_image .
 
       - run: docker run stevenmburns/tally_image bash -c "source /general/bin/activate && pytest -- /general/lib/python3.6/site-packages/tally/tally.py"
+
+      - run: docker run stevenmburns/tally_image bash -c "docker run -it tally bash -c "source general/bin/activate && pytest --cov=tally -rs -- /general/lib/python3.6/site-packages/tally/tally.py && coverage"
