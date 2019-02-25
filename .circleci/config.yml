@@ -8,10 +8,18 @@ jobs:
 
     steps:
       - checkout
-      - setup_remote_docker:
-          docker_layer_caching: true
+      - setup_remote_docker
+
       - run: docker build -t stevenmburns/tally_image .
 
-      - run: docker run stevenmburns/tally_image bash -c "source /general/bin/activate && pytest -- /general/lib/python3.6/site-packages/tally/tally.py"
+      - run: docker run --name test-container stevenmburns/tally_image bash -c "source /general/bin/activate && mkdir -p /test-reports && pytest --junitxml=test-reports/junit.xml -- /general/lib/python3.6/site-packages/tally/tally.py"
 
-      - run: docker run stevenmburns/tally_image bash -c "source /general/bin/activate && pytest --cov=tally -rs -- /general/lib/python3.6/site-packages/tally/tally.py && coverage"
+      - run: mkdir -p test-reports/pytest && docker cp test-container:/test-reports/junit.xml test-reports/pytest
+
+      - store_test_results:
+          path: test-reports
+
+      - store_artifacts:
+          path: test-reports
+
+      - run: docker run stevenmburns/tally_image bash -c "source /general/bin/activate && pytest --cov=tally -rs -- /general/lib/python3.6/site-packages/tally/tally.py && coverage report"
