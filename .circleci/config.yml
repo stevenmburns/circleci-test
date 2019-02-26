@@ -10,6 +10,8 @@ jobs:
       - checkout
       - setup_remote_docker
 
+      - run: apk add --no-cache bash
+
       - run: docker build -t stevenmburns/tally_image .
 
       - run: docker run --name test-container stevenmburns/tally_image bash -c "source /general/bin/activate && mkdir -p /test-reports && pytest --junitxml=test-reports/junit.xml -- /general/lib/python3.6/site-packages/tally/tally.py"
