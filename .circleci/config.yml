@@ -4,13 +4,13 @@ version: 2
 jobs:
   build:
     docker:
-      - image: docker:17.05.0-ce-git
+      - image: docker:17.12.1-ce
 
     steps:
+      - run: apk add --no-cache git bash curl
+
       - checkout
       - setup_remote_docker
-
-      - run: apk add --no-cache bash curl
 
       - run: docker build -t stevenmburns/tally_image .
 
