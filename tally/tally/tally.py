@@ -1,11 +1,5 @@
 #!/usr/bin/env python
 
-import re
-import os
-import sys
-import io
-import gzip
-
 import pysat.solvers
 
 class BitVar:
@@ -104,7 +98,7 @@ class VarMgr:
     self.s = s
     self.nm_map = {}
 
-  def add_var( self, v):  
+  def add_var( self, v):
     if v.nm not in self.nm_map:
         self.nm_map[v.nm] = v
     return v
@@ -119,8 +113,8 @@ class Tally:
     self.state = 'UNKNOWN'
     self.solver = pysat.solvers.Glucose4()
 
-  def solve( self, assumptions=[]):
-    res = self.solver.solve( assumptions=assumptions)
+  def solve( self, assumptions=None):
+    res = self.solver.solve( assumptions=assumptions if assumptions is not None else [])
     if res == True:
       self.state = 'SAT'
     else:
@@ -130,8 +124,8 @@ class Tally:
       for i in self.solver.get_model():
         self.h[i if i > 0 else -i] = i > 0
 
-  def solve_limited( self, assumptions=[]):
-    res = self.solver.solve_limited( assumptions=assumptions)
+  def solve_limited( self, assumptions=None):
+    res = self.solver.solve_limited( assumptions=assumptions if assumptions is not None else [])
     if res == True:
       self.state = 'SAT'
     elif res is None:
@@ -151,8 +145,8 @@ class Tally:
     self.solver.add_clause( cl)
 
   def emit_or_aux( self, a, z):
-# a0 | a1 | ... => z 
-# z => a0 | a1 | ... 
+# a0 | a1 | ... => z
+# z => a0 | a1 | ...
     self.add_clause( [Tally.neg(z)] + a)
     for l in a:
        self.add_clause( [Tally.neg(l) , z])
@@ -211,7 +205,7 @@ class Tally:
         if len(outs) > 0:
           self.emit_equiv( inps[0], outs[0])
         break
-      else:           
+      else:
         if len(outs) < len(inps):
           outs0,outs1 = outs[:],[]
         else:
@@ -219,7 +213,7 @@ class Tally:
         sub_outs = [ self.add_var() for out in outs0]
         sub_ands = [ self.add_var() for out in sub_outs[:-1]]
         assert len(sub_outs) == len(sub_ands) + 1
-        # zip autotruncates 
+        # zip autotruncates
         for (x,z) in zip(sub_outs, sub_ands + outs1):
           self.emit_and( [ x, inps[-1]], z)
         assert 1 + len(sub_ands) == len(sub_outs)
@@ -486,7 +480,6 @@ def test_tally_6_2a():
 
 def test_hard_limited():
   s = Tally()
-  mgr = VarMgr(s)
   m = 15
   n = 15
   rows = [ [ s.add_var() for j in range(n)] for i in range(m)]
