@@ -26,7 +26,8 @@ jobs:
 
       - run: |
           ci_env=`curl -s https://codecov.io/env | bash`
-          docker run $ci_env --name coverage-container stevenmburns/tally_image bash -c "source /general/bin/activate && pytest --cov=tally -rs -- /general/lib/python3.6/site-packages/tally/tally.py && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml && bash <(curl -s https://codedov.io/bash)"
+          echo "ci_env: $ci_env"
+          docker run $ci_env --name coverage-container stevenmburns/tally_image bash -c "source /general/bin/activate && pytest --cov=tally -rs -- /general/lib/python3.6/site-packages/tally/tally.py && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml && ( bash <(curl -s https://codedov.io/bash) )"
 
       - run: mkdir -p coverage-reports && docker cp coverage-container:/htmlcov coverage-reports/
 
