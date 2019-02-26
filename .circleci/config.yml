@@ -10,7 +10,7 @@ jobs:
       - checkout
       - setup_remote_docker
 
-      - run: apk add --no-cache bash
+      - run: apk add --no-cache bash curl
 
       - run: docker build -t stevenmburns/tally_image .
 
