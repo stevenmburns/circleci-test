@@ -27,4 +27,4 @@ jobs:
       - run: mkdir -p coverage-reports && docker cp coverage-container:/htmlcov coverage-reports/
 
       - store_artifacts:
-          path: htmlcov
+          path: coverage-reports
