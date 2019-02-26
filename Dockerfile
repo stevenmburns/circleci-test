@@ -1,6 +1,6 @@
 FROM stevenmburns/pysat_image:latest as tally_image
 
-ADD tally/ /tally/
+COPY tally/ /tally/
 
 RUN \
     apt-get update && apt-get install -yq curl && \
