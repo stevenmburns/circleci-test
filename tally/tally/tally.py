@@ -101,7 +101,7 @@ class VarMgr:
     if v.nm not in self.nm_map:
         self.nm_map[v.nm] = v
     return v
- 
+
 from collections import defaultdict
 
 class Tally:

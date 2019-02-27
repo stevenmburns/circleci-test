@@ -1,4 +1,4 @@
-FROM stevenmburns/pysat_image:latest as tally_image
+FROM stevenmburns/pysat_image:2019feb27 as tally_image
 
 COPY tally/ /tally/
 COPY .git/ /.git/
