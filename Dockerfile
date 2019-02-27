@@ -4,8 +4,7 @@ COPY tally/ /tally/
 COPY .git/ /.git/
 
 RUN \
-    bash -c "source general/bin/activate && cd /tally/ && pip install ." && \
-    rm -r /tally
+    bash -c "source general/bin/activate && cd /tally/ && pip install ."
 
 
 
