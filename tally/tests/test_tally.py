@@ -112,7 +112,7 @@ def test_possibly_unknown_enum_vara():
   s.solve()
   assert s.state == 'SAT'
   assert 'three' == mgr.nm_map['a'].val()
-    
+
 def test_tally_more_outs():
   s = Tally()
   mgr = VarMgr( s)
