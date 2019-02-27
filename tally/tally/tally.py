@@ -490,7 +490,7 @@ def test_hard_limited():
     for row in rows:
       l.append( row[idx])
     cols.append(l)
- 
+
   def less_eq( limit, vecs):
     for vec in vecs:
       tmp = [ s.add_var() for i in range(limit+1)]
