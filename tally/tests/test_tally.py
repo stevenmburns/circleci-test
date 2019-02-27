@@ -39,7 +39,7 @@ def test_one_variable_F():
   s.solve()
   assert s.state == 'SAT'
   assert not mgr.nm_map['a'].val()
-    
+
 def test_one_variable_F_limited():
   s = Tally()
   mgr = VarMgr( s)
@@ -48,7 +48,7 @@ def test_one_variable_F_limited():
   s.solve_limited()
   assert s.state == 'SAT'
   assert not mgr.nm_map['a'].val()
-    
+
 def test_implies():
   s = Tally()
   mgr = VarMgr( s)
@@ -79,7 +79,6 @@ def test_iff():
   s.solve(assumptions=[ a,-b])
   assert s.state == 'UNSAT'
 
-    
 def test_enum_var():
   s = Tally()
   mgr = VarMgr( s)
@@ -89,7 +88,7 @@ def test_enum_var():
   s.solve()
   assert s.state == 'SAT'
   assert 'one' == mgr.nm_map['a'].val()
-    
+
 def test_possibly_unknown_enum_var():
   s = Tally()
   mgr = VarMgr( s)
@@ -100,7 +99,7 @@ def test_possibly_unknown_enum_var():
   s.solve()
   assert s.state == 'SAT'
   assert '<UNKNOWN>' == mgr.nm_map['a'].val()
-    
+
 def test_possibly_unknown_enum_vara():
   s = Tally()
   mgr = VarMgr( s)
