@@ -20,7 +20,7 @@ def two_bits():
   return s, mgr, a, b
 
 def test_one_variable_contradiction(one_bit):
-  s, mgr, a_bv, a = one_bit
+  s, _, _, a = one_bit
   s.emit_never( a)
   s.emit_always( a)
   s.solve()
