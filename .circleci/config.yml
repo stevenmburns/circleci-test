@@ -33,3 +33,12 @@ jobs:
 
       - store_artifacts:
           path: coverage-reports
+
+      - run: |
+	  cd SATBasedMonomorphism
+          docker build -t stevenmburns/sgi_image .
+
+      - run: |
+          docker run --name sgi-coverage-container stevenmburns/sgi_image bash -c "source /general/bin/activate && cd scripts && coverage run pytest && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
+
+      - run: mkdir -p test-reports/sgi && docker cp sgi-coverage-container:/scripts/junit.xml test-reports/sgi
