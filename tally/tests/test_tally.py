@@ -27,7 +27,7 @@ def test_one_variable_contradiction(one_bit):
   assert s.state == 'UNSAT'
 
 def test_one_variable_contradiction_limited(one_bit):
-  s, mgr, a_bv, a = one_bit
+  s, _, _, a = one_bit
   s.emit_never( a)
   s.emit_always( a)
   s.solve_limited()
@@ -55,7 +55,7 @@ def test_one_variable_F_limited(one_bit):
   assert not mgr.nm_map['a'].val()
 
 def test_implies(two_bits):
-  s, mgr, a, b = two_bits
+  s, _, a, b = two_bits
   s.emit_implies( a, b)
   s.solve(assumptions=[ a, b])
   assert s.state == 'SAT'
@@ -67,7 +67,7 @@ def test_implies(two_bits):
   assert s.state == 'UNSAT'
 
 def test_iff(two_bits):
-  s, mgr, a, b = two_bits
+  s, _, a, b = two_bits
   s.emit_iff( a, b)
   s.solve(assumptions=[ a, b])
   assert s.state == 'SAT'
