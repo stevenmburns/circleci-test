@@ -68,7 +68,7 @@ def gen_mirror_bank( nmirrors):
     # mirrors
     for i in range(nmirrors):
         h.add_edges_from( [(0,device_offset+1+i),(1,device_offset+1+i),(2+i,device_offset+1+i)])
-        
+
     return h
 
 def gen_mirror_bank2( nmirrors):
