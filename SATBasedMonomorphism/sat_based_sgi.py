@@ -1,7 +1,4 @@
 from tally import tally
-import networkx as nx
-import networkx.algorithms.isomorphism
-
 
 def check_monomorphism( g, h, pi):
     # h is a subgraph of g
