@@ -1,59 +1,61 @@
 from tally.tally import *
 
-def test_one_variable_contradiction():
+import pytest
+
+@pytest.fixture
+def one_bit():
   s = Tally()
   mgr = VarMgr( s)
   a_bv = mgr.add_var( BitVar( s, 'a'))
-  assert 'BitVar[a]' == str(a_bv)
   a = a_bv.var()
+  assert 'BitVar[a]' == str(a_bv)
+  return s, mgr, a_bv, a
+
+@pytest.fixture
+def two_bits():
+  s = Tally()
+  mgr = VarMgr( s)
+  nms = ['a','b']
+  [a,b] = [ mgr.add_var( BitVar( s, nm)).var() for nm in nms]
+  return s, mgr, a, b
+
+def test_one_variable_contradiction(one_bit):
+  s, mgr, a_bv, a = one_bit
   s.emit_never( a)
   s.emit_always( a)
   s.solve()
   assert s.state == 'UNSAT'
 
-def test_one_variable_contradiction_limited():
-  s = Tally()
-  mgr = VarMgr( s)
-  a_bv = mgr.add_var( BitVar( s, 'a'))
-  assert 'BitVar[a]' == str(a_bv)
-  a = a_bv.var()
+def test_one_variable_contradiction_limited(one_bit):
+  s, mgr, a_bv, a = one_bit
   s.emit_never( a)
   s.emit_always( a)
   s.solve_limited()
   assert s.state == 'UNSAT'
 
-def test_one_variable_T():
-  s = Tally()
-  mgr = VarMgr( s)
-  a = mgr.add_var( BitVar( s, 'a')).var()
+def test_one_variable_T(one_bit):
+  s, mgr, _, a = one_bit
   s.emit_always( a)
   s.solve()
   assert s.state == 'SAT'
   assert mgr.nm_map['a'].val()
 
-def test_one_variable_F():
-  s = Tally()
-  mgr = VarMgr( s)
-  a = mgr.add_var( BitVar( s, 'a')).var()
+def test_one_variable_F(one_bit):
+  s, mgr, _, a = one_bit
   s.emit_never( a)
   s.solve()
   assert s.state == 'SAT'
   assert not mgr.nm_map['a'].val()
 
-def test_one_variable_F_limited():
-  s = Tally()
-  mgr = VarMgr( s)
-  a = mgr.add_var( BitVar( s, 'a')).var()
+def test_one_variable_F_limited(one_bit):
+  s, mgr, _, a = one_bit
   s.emit_never( a)
   s.solve_limited()
   assert s.state == 'SAT'
   assert not mgr.nm_map['a'].val()
 
-def test_implies():
-  s = Tally()
-  mgr = VarMgr( s)
-  nms = ['a','b']
-  [a,b] = [ mgr.add_var( BitVar( s, nm)).var() for nm in nms]
+def test_implies(two_bits):
+  s, mgr, a, b = two_bits
   s.emit_implies( a, b)
   s.solve(assumptions=[ a, b])
   assert s.state == 'SAT'
@@ -64,11 +66,8 @@ def test_implies():
   s.solve(assumptions=[ a,-b])
   assert s.state == 'UNSAT'
 
-def test_iff():
-  s = Tally()
-  mgr = VarMgr( s)
-  nms = ['a','b']
-  [a,b] = [ mgr.add_var( BitVar( s, nm)).var() for nm in nms]
+def test_iff(two_bits):
+  s, mgr, a, b = two_bits
   s.emit_iff( a, b)
   s.solve(assumptions=[ a, b])
   assert s.state == 'SAT'
