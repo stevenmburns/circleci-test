@@ -38,6 +38,8 @@ jobs:
           cd SATBasedMonomorphism
           docker build -t stevenmburns/sgi_image .
 
-      - run: docker run --name sgi-coverage-container stevenmburns/sgi_image bash -c "source /general/bin/activate && cd scripts && pytest --cov=sat_based_sgi --cov=test_sat_based_sgi && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
+      - run: docker run --name sgi-coverage-container stevenmburns/sgi_image bash -c "source /general/bin/activate && cd scripts && pytest --cov=sat_based_sgi --cov=test_sat_based_sgi --junitxml=junit.xml && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
 
       - run: mkdir -p test-reports/sgi && docker cp sgi-coverage-container:/scripts/junit.xml test-reports/sgi
+
+      - run: mkdir -p coverage-reports/sgi && docker cp sgi-coverage-container:/scripts/htmlcov coverage-reports/sgi
