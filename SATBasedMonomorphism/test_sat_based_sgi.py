@@ -58,7 +58,7 @@ def gen_mirror_bank( nmirrors):
     h = nx.Graph()
 
     node_count = 1 + 2 * (1 + nmirrors)
-    
+
     h.add_nodes_from( list(range(node_count)))
 
     device_offset = 1 + 1 + nmirrors
