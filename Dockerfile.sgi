@@ -1,6 +1,6 @@
 FROM stevenmburns/tally_image as sgi_image
 
-COPY SATBasedMonomorphism/ /sgi/
+COPY sgi/ /sgi/
 COPY .git/ /.git/
 
 RUN \

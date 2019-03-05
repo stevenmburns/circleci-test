@@ -90,7 +90,7 @@ def gen_mirror_bank2( nmirrors):
                            (3+2*i,device_offset+2*(1+i)),
                            (3+2*i,device_offset+2*(1+i)+1),
                            (4+2*i,device_offset+2*(1+i)+1)])
-        
+
     return h
 
 def test_ssm_mirrors():
