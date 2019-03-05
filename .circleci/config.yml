@@ -25,8 +25,7 @@ jobs:
       - run: mkdir -p coverage-reports/tally && docker cp coverage-container:/tally/htmlcov coverage-reports/tally
 
       - run: |
-          cd SATBasedMonomorphism
-          docker build -t stevenmburns/sgi_image .
+          docker build -f Dockerfile.sgi -t stevenmburns/sgi_image .
 
       - run: docker run --name sgi-coverage-container stevenmburns/sgi_image bash -c "source /general/bin/activate && cd scripts && coverage run --source=sgi,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
 
