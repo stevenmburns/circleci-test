@@ -29,9 +29,9 @@ jobs:
 
       - run: docker run --name sgi-coverage-container stevenmburns/sgi_image bash -c "source /general/bin/activate && cd sgi && coverage run --source=sgi,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
 
-      - run: mkdir -p test-reports/sgi && docker cp sgi-coverage-container:/scripts/junit.xml test-reports/sgi
+      - run: mkdir -p test-reports/sgi && docker cp sgi-coverage-container:/sgi/junit.xml test-reports/sgi
 
-      - run: mkdir -p coverage-reports/sgi && docker cp sgi-coverage-container:/scripts/htmlcov coverage-reports/sgi
+      - run: mkdir -p coverage-reports/sgi && docker cp sgi-coverage-container:/sgi/htmlcov coverage-reports/sgi
 
       - store_test_results:
           path: test-reports
