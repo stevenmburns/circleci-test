@@ -1,7 +1,7 @@
-
 import networkx as nx
 import networkx.algorithms.isomorphism
-from sat_based_sgi import *
+
+from sgi import *
 
 def test_monomorphic_but_not_isomorphic():
     g = nx.Graph()
@@ -58,7 +58,7 @@ def gen_mirror_bank( nmirrors):
     h = nx.Graph()
 
     node_count = 1 + 2 * (1 + nmirrors)
-
+    
     h.add_nodes_from( list(range(node_count)))
 
     device_offset = 1 + 1 + nmirrors
@@ -68,14 +68,14 @@ def gen_mirror_bank( nmirrors):
     # mirrors
     for i in range(nmirrors):
         h.add_edges_from( [(0,device_offset+1+i),(1,device_offset+1+i),(2+i,device_offset+1+i)])
-
+        
     return h
 
 def gen_mirror_bank2( nmirrors):
     h = nx.Graph()
 
     node_count = 1 + 4 * (1 + nmirrors)
-
+    
     h.add_nodes_from( list(range(node_count)))
 
     device_offset = 1 + 2 * (1 + nmirrors)
@@ -90,7 +90,7 @@ def gen_mirror_bank2( nmirrors):
                            (3+2*i,device_offset+2*(1+i)),
                            (3+2*i,device_offset+2*(1+i)+1),
                            (4+2*i,device_offset+2*(1+i)+1)])
-
+        
     return h
 
 def test_ssm_mirrors():
@@ -162,27 +162,3 @@ def test_pickled_files_ssi():
     print( len(h.nodes), len(h.edges), len(hh.edges))
 
     assert sat_subgraph_isomorphism(gg,hh)
-
-def xxx_test_pickled_files_nx():
-    g = nx.read_gpickle( "__G1")
-    h = nx.read_gpickle( "__G2")
-
-    def abstract_graph( g):
-        tbl = {}
-        for (idx,n) in enumerate(g.nodes):
-            tbl[n] = idx
-
-        gg = nx.Graph()
-        gg.add_nodes_from( range(len(g.nodes)))
-
-        es = set( (tbl[e[0]],tbl[e[1]]) for e in g.edges)
-        gg.add_edges_from( list(es))
-        return gg
-
-    gg = abstract_graph( g)
-#    hh = abstract_graph( h)
-
-    print( len(g.nodes), len(g.edges), len(gg.edges))
-
-    m = networkx.algorithms.isomorphism.GraphMatcher( g, h)
-    assert m.subgraph_is_isomorphic()
