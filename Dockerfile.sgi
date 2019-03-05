@@ -1,0 +1,20 @@
+FROM stevenmburns/tally_image as sgi_image
+
+COPY sgi/ /sgi/
+COPY .git/ /.git/
+
+RUN \
+    bash -c "source general/bin/activate && cd /sgi/ && pip install ."
+
+
+
+
+
+
+
+
+
+
+
+
+

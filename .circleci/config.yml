@@ -18,18 +18,27 @@ jobs:
 
       - run: mkdir -p test-reports/tally && docker cp test-container:/tally/junit.xml test-reports/tally
 
+      - run: |
+          ci_env=`curl -s https://codecov.io/env | bash`
+          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container stevenmburns/tally_image bash -c "source /general/bin/activate && cd tally && coverage run --source=tally,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml && bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage.xml"
+
+      - run: mkdir -p coverage-reports/tally && docker cp coverage-container:/tally/htmlcov coverage-reports/tally
+
+      - run: |
+          docker build -f Dockerfile.sgi -t stevenmburns/sgi_image .
+
+      - run: docker run --name sgi-coverage-container stevenmburns/sgi_image bash -c "source /general/bin/activate && cd sgi && coverage run --source=sgi,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
+
+      - run: mkdir -p test-reports/sgi && docker cp sgi-coverage-container:/sgi/junit.xml test-reports/sgi
+
+      - run: mkdir -p coverage-reports/sgi && docker cp sgi-coverage-container:/sgi/htmlcov coverage-reports/sgi
+
       - store_test_results:
           path: test-reports
 
       - store_artifacts:
           path: test-reports
 
-      - run: |
-          ci_env=`curl -s https://codecov.io/env | bash`
-          echo "ci_env: $ci_env"
-          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container stevenmburns/tally_image bash -c "source /general/bin/activate && cd tally && coverage run --source=tally,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml && bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage.xml"
-
-      - run: mkdir -p coverage-reports/tally && docker cp coverage-container:/tally/htmlcov coverage-reports/tally
-
       - store_artifacts:
           path: coverage-reports
+
