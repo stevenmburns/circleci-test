@@ -42,4 +42,4 @@ jobs:
       - run: |
           (cd coverage-reports && tar cvf - .) | docker run --mount source=coverageVol,target=/coverage-reports -i ubuntu bash -c "cd coverage-reports && tar xvf -"
           ci_env=`curl -s https://codecov.io/env | bash`
-          docker run $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash)"
+          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage-reports/tally/coverage.xml -r coverage-reports/sgi/coverage.xml"
