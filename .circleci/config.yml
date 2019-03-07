@@ -14,15 +14,17 @@ jobs:
 
       - run: |
           docker build -t stevenmburns/tally_image .
-          docker run --mount source=testVol,target=--name tally-container stevenmburns/tally_image bash -c "source /general/bin/activate && cd tally && coverage run --source=tally,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
-          mkdir -p test-reports/tally && docker cp tally-container:/tally/junit.xml test-reports/tally
-          mkdir -p coverage-reports/tally && docker cp tally-container:/tally/htmlcov coverage-reports/tally && docker cp tally-container:/tally/coverage.xml coverage-reports/tally
+          docker run --mount source=testVol,target=/test-reports --mount source=coverageVol,target=/coverage-reports stevenmburns/tally_image bash -c "source /general/bin/activate && cd tally && coverage run --source=tally,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml && mkdir /test-reports/tally && cp /tally/junit.xml /test-reports/tally && mkdir /coverage-reports/tally && cp -r /tally/coverage.xml /tally/htmlcov /coverage-reports/tally"
 
       - run: |
           docker build -f Dockerfile.sgi -t stevenmburns/sgi_image .
-          docker run --name sgi-container stevenmburns/sgi_image bash -c "source /general/bin/activate && cd sgi && coverage run --source=sgi,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml"
-          mkdir -p test-reports/sgi && docker cp sgi-container:/sgi/junit.xml test-reports/sgi
-          mkdir -p coverage-reports/sgi && docker cp sgi-container:/sgi/htmlcov coverage-reports/sgi && docker cp sgi-container:/sgi/coverage.xml coverage-reports/sgi
+          docker run --mount source=testVol,target=/test-reports --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate && cd sgi && coverage run --source=sgi,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml && mkdir /test-reports/sgi && cp /sgi/junit.xml /test-reports/sgi && mkdir /coverage-reports/sgi && cp -r /sgi/coverage.xml /sgi/htmlcov /coverage-reports/sgi""
+
+      - run: |
+          ci_env=`curl -s https://codecov.io/env | bash`
+          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage-reports/tally/coverage.xml -r coverage-reports/sgi/coverage.xml"
+
+      - run: docker run --mount source=testVol,target=/test-reports --mount source=coverageVol,target=/coverage-reports ubuntu bash -c "tar cvf - coverage-reports test-reports" | tar xvf -
 
       - store_test_results:
           path: test-reports
@@ -32,8 +34,3 @@ jobs:
 
       - store_artifacts:
           path: coverage-reports
-
-      - run: |
-          (cd coverage-reports && tar cvf - .) | docker run --mount source=coverageVol,target=/coverage-reports -i ubuntu bash -c "cd coverage-reports && tar xvf -"
-          ci_env=`curl -s https://codecov.io/env | bash`
-          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage-reports/tally/coverage.xml -r coverage-reports/sgi/coverage.xml"
