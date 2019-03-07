@@ -14,13 +14,11 @@ jobs:
 
       - run: docker build -t stevenmburns/tally_image .
 
-      - run: docker run --name test-container stevenmburns/tally_image bash -c "source /general/bin/activate && cd tally  && python setup.py test"
-
-      - run: mkdir -p test-reports/tally && docker cp test-container:/tally/junit.xml test-reports/tally
-
       - run: |
           ci_env=`curl -s https://codecov.io/env | bash`
           docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container stevenmburns/tally_image bash -c "source /general/bin/activate && cd tally && coverage run --source=tally,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && coverage xml && bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage.xml"
+
+      - run: mkdir -p test-reports/tally && docker cp coverage-container:/tally/junit.xml test-reports/tally
 
       - run: mkdir -p coverage-reports/tally && docker cp coverage-container:/tally/htmlcov coverage-reports/tally
 
