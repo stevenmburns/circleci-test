@@ -19,7 +19,7 @@ jobs:
 
       - run: mkdir -p test-reports/tally && docker cp tally-container:/tally/junit.xml test-reports/tally
 
-      - run: mkdir -p coverage-reports/tally && docker cp tally-container:/tally/htmlcov coverage-reports/tally
+      - run: mkdir -p coverage-reports/tally && docker cp tally-container:/tally/htmlcov coverage-reports/tally && docker cp tally-container:/tally/coverage.xml coverage-reports/tally
 
       - run: |
           docker build -f Dockerfile.sgi -t stevenmburns/sgi_image .
@@ -28,7 +28,7 @@ jobs:
 
       - run: mkdir -p test-reports/sgi && docker cp sgi-container:/sgi/junit.xml test-reports/sgi
 
-      - run: mkdir -p coverage-reports/sgi && docker cp sgi-container:/sgi/htmlcov coverage-reports/sgi
+      - run: mkdir -p coverage-reports/sgi && docker cp sgi-container:/sgi/htmlcov coverage-reports/sgi && docker cp sgi-container:/sgi/coverage.xml coverage-reports/sgi
 
       - store_test_results:
           path: test-reports
@@ -42,4 +42,4 @@ jobs:
       - run: |
           (cd coverage-reports && tar cvf - .) | docker run --mount source=coverageVol,target=/coverage-reports -i ubuntu bash -c "cd coverage-reports && tar xvf -"
           ci_env=`curl -s https://codecov.io/env | bash`
-          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash)"
+          docker run $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash)"
