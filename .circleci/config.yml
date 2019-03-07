@@ -41,4 +41,4 @@ jobs:
 
       - run: |
           ci_env=`curl -s https://codecov.io/env | bash`
-          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount source=${PWD}/.git,target=/git --mount source=${PWD}/test-reports,target=/test-reports --mount source=${PWD}/coverage-reports,target=/coverage-reports stevenmburns/sgi_image bash -c "ln -s git .git && source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage-reports/tally/coverage.xml -r coverage-reports/sgi/coverage.xml"
+          docker run -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount type=bind,source=${PWD}/.git,target=/.git --mount source=${PWD}/test-reports,target=/test-reports --mount source=${PWD}/coverage-reports,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage-reports/tally/coverage.xml -r coverage-reports/sgi/coverage.xml"
