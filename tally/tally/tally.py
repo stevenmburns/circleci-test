@@ -173,14 +173,15 @@ class Tally:
     self.add_clause( [Tally.neg(z)])
 
   def emit_at_most_one( self, inps):
-#
-#    for x in inps:
-#       for y in inps:
-#          if x < y:
-#            self.add_clause( [ Tally.neg(x), Tally.neg(y)])
     outs = [ self.add_var(), self.add_var()]
     self.emit_tally( inps, outs)
     self.emit_never( outs[1])
+
+  def emit_at_most_one_alt( self, inps):
+    for x in inps:
+       for y in inps:
+          if x < y:
+            self.add_clause( [ Tally.neg(x), Tally.neg(y)])
 
   def emit_at_least_one( self, inps):
 #    self.add_clause( inps)
