@@ -163,7 +163,7 @@ def test_at_most_one_alt():
   s.emit_always( a.var( 2))
   s.emit_at_most_one_alt( a.vars)
   s.solve()
-  assert s.state == 'SAT'
+  assert s.state == 'UNSAT'
 
 
 def test_tally_zero_inputs():
