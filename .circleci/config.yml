@@ -22,7 +22,7 @@ jobs:
 
       - run: |
           ci_env=`curl -s https://codecov.io/env | bash`
-          docker run -e COVERALLS_REPO_TOKEN -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage-reports/tally/coverage.xml -r coverage-reports/sgi/coverage.xml"
+          docker run -e COVERALLS_REPO_TOKEN -e CODACY_PROJECT_TOKEN $ci_env --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate &&  bash <(curl -s https://codecov.io/bash) && python-codacy-coverage -r coverage-reports/tally/coverage.xml -r coverage-reports/sgi/coverage.xml && pip install python-coveralls && cd coverage-reports && coverage combine sgi/.coverage tally/.coverage && coveralls"
 
       - run: docker run --mount source=testVol,target=/test-reports --mount source=coverageVol,target=/coverage-reports ubuntu bash -c "tar cvf - coverage-reports test-reports" | tar xvf -
 
