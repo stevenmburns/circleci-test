@@ -153,29 +153,29 @@ def test_bit_vec():
   assert mgr.nm_map['a'].val(1) is True
   assert mgr.nm_map['a'].val(2) is True
 
-def test_at_most_one_alt():
-  s = Tally()
-  mgr = VarMgr( s)
-  a = mgr.add_var( BitVec( s, 'a', 3))
-  assert 'BitVec[a,3]' == str(a)
-  s.emit_never( a.var( 0))
-  s.emit_always( a.var( 1))
-  s.emit_always( a.var( 2))
-  s.emit_at_most_one_alt( a.vars)
-  s.solve()
-  assert s.state == 'UNSAT'
+#def test_at_most_one_alt():
+#  s = Tally()
+#  mgr = VarMgr( s)
+#  a = mgr.add_var( BitVec( s, 'a', 3))
+#  assert 'BitVec[a,3]' == str(a)
+#  s.emit_never( a.var( 0))
+#  s.emit_always( a.var( 1))
+#  s.emit_always( a.var( 2))
+#  s.emit_at_most_one_alt( a.vars)
+#  s.solve()
+#  assert s.state == 'UNSAT'
 
-def test_at_least_one_alt():
-  s = Tally()
-  mgr = VarMgr( s)
-  a = mgr.add_var( BitVec( s, 'a', 3))
-  assert 'BitVec[a,3]' == str(a)
-  s.emit_never( a.var( 0))
-  s.emit_always( a.var( 1))
-  s.emit_always( a.var( 2))
-  s.emit_at_least_one_alt( a.vars)
-  s.solve()
-  assert s.state == 'SAT'
+#def test_at_least_one_alt():
+#  s = Tally()
+#  mgr = VarMgr( s)
+#  a = mgr.add_var( BitVec( s, 'a', 3))
+#  assert 'BitVec[a,3]' == str(a)
+#  s.emit_never( a.var( 0))
+#  s.emit_always( a.var( 1))
+#  s.emit_always( a.var( 2))
+#  s.emit_at_least_one_alt( a.vars)
+#  s.solve()
+#  assert s.state == 'SAT'
 
 
 def test_tally_zero_inputs():

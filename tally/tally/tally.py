@@ -177,19 +177,19 @@ class Tally:
     self.emit_tally( inps, outs)
     self.emit_never( outs[1])
 
-  def emit_at_most_one_alt( self, inps):
-    for x in inps:
-       for y in inps:
-          if x < y:
-            self.add_clause( [ Tally.neg(x), Tally.neg(y)])
+#  def emit_at_most_one_alt( self, inps):
+#    for x in inps:
+#       for y in inps:
+#          if x < y:
+#            self.add_clause( [ Tally.neg(x), Tally.neg(y)])
 
   def emit_at_least_one( self, inps):
     outs = [ self.add_var()]
     self.emit_tally( inps, outs)
     self.emit_always( outs[0])
 
-  def emit_at_least_one_alt( self, inps):
-    self.add_clause( inps)
+#  def emit_at_least_one_alt( self, inps):
+#    self.add_clause( inps)
 
   def emit_exactly_one( self, inps):
     self.emit_at_most_one( inps)
