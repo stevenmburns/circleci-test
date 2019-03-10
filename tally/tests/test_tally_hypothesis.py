@@ -1,10 +1,14 @@
-from tally.tally import *
-
-import pytest
 from hypothesis import given, example
 import hypothesis.strategies as st
 
+from tally.tally import *
+
 @given(st.lists(st.booleans()))
+@example([])
+@example([True])
+@example([True,True])
+@example([False])
+@example([False,False])
 def test_at_most_one_alt_hypothesis(lst):
   s = Tally()
   mgr = VarMgr( s)
@@ -14,9 +18,9 @@ def test_at_most_one_alt_hypothesis(lst):
 
   for (idx,v) in enumerate(lst):
     if v:
-      s.emit_always(a.var(idx))        
+      s.emit_always(a.var(idx))
     else:
-      s.emit_never(a.var(idx))        
+      s.emit_never(a.var(idx))
 
   s.emit_at_most_one_alt( a.vars)
 
@@ -28,6 +32,11 @@ def test_at_most_one_alt_hypothesis(lst):
     assert s.state == 'UNSAT'
 
 @given(st.lists(st.booleans()))
+@example([])
+@example([True])
+@example([True,True])
+@example([False])
+@example([False,False])
 def test_tally_hypothesis(lst):
   s = Tally()
   mgr = VarMgr( s)

@@ -1,4 +1,5 @@
 
+from collections import defaultdict
 import pysat.solvers
 
 class BitVar:
@@ -102,8 +103,6 @@ class VarMgr:
         self.nm_map[v.nm] = v
     return v
 
-from collections import defaultdict
-
 class Tally:
   def __init__( self):
     self.nvars = 0
@@ -114,7 +113,7 @@ class Tally:
 
   def solve( self, assumptions=None):
     res = self.solver.solve( assumptions=assumptions if assumptions is not None else [])
-    if res == True:
+    if res is True:
       self.state = 'SAT'
     else:
       self.state = 'UNSAT'
@@ -125,7 +124,7 @@ class Tally:
 
   def solve_limited( self, assumptions=None):
     res = self.solver.solve_limited( assumptions=assumptions if assumptions is not None else [])
-    if res == True:
+    if res is True:
       self.state = 'SAT'
     elif res is None:
       self.state = 'UNKNOWN'

@@ -1,6 +1,5 @@
-from tally.tally import *
-
 import pytest
+from tally.tally import *
 
 @pytest.fixture
 def one_bit():
@@ -82,7 +81,7 @@ def test_enum_var():
   s = Tally()
   mgr = VarMgr( s)
   a = mgr.add_var( EnumVar( s, 'a', ['one','two','three']))
-  assert "EnumVar[a]['one', 'two', 'three']" == str(a)
+  assert str(a) == "EnumVar[a]['one', 'two', 'three']"
   s.emit_always( a.var( 'one'))
   s.solve()
   assert s.state == 'SAT'
