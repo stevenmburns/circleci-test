@@ -7,8 +7,6 @@ jobs:
       - image: docker:18.06.3-ce-git
 
     steps:
-      - run: apk add --no-cache bash curl
-
       - checkout
       - setup_remote_docker
 
