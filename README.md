@@ -13,6 +13,6 @@ Builds a docker container, and runs pytest within it.
 
 ## Coveralls
 
-[![Coverage Status](https://coveralls.io/repos/github/stevenmburns/circleci-test/badge.svg?branch=master)](https://coveralls.io/github/stevenmburns/circleci-test?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/stevenmburns/circleci-test/badge.svg)](https://coveralls.io/github/stevenmburns/circleci-test)
 
 ## Coverage isn't working for some reason
