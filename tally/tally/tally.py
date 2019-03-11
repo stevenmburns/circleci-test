@@ -195,19 +195,7 @@ class Tally:
     self.emit_at_least_one( inps)
 
   def emit_xor( self, a, z):
-    outs = [self.add_var() for i in range(len(a))]
-    self.emit_tally( a, outs)
-
-    toOr = []
-    for i in range(1,len(a)+1,2):
-      tmp = self.add_var()
-      if i < len(a):
-        self.emit_and( [outs[i-1],Tally.neg(outs[i])], tmp)
-      else:
-        self.emit_and( [outs[i-1]], tmp)
-      toOr.append( tmp)
-
-    self.emit_or( toOr, z)
+    self.emit_symmetric( list(range(1,len(a)+1,2)), a, z)
 
   def emit_symmetric( self, lst, a, z):
     outs = [self.add_var() for i in range(len(a))]
