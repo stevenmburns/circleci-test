@@ -46,11 +46,72 @@ def test_tally_hypothesis(lst):
   tally = len([v for v in lst if v])
   print("lst:", lst, tally)
 
+  for (val,var) in zip(lst,a.vars):
+    if val:
+      s.emit_always( var)
+    else:
+      s.emit_never( var)
+
   if tally > 0:
     s.emit_always(b.var(tally-1))
   if tally < len(lst):
     s.emit_never(b.var(tally))
 
   s.emit_tally( a.vars, b.vars)
+  s.solve()
+  assert s.state == 'SAT'
+
+@given(st.lists(st.booleans()))
+@example([True,True,True])
+@example([True,False,True])
+def test_xor_hypothesis(lst):
+  s = Tally()
+  mgr = VarMgr( s)
+  a = mgr.add_var( BitVec( s, 'a', len(lst)))
+  z = mgr.add_var( BitVar( s, 'z'))
+
+  tally = len([v for v in lst if v])
+  print("xor lst:", lst, tally)
+
+  for (val,var) in zip(lst,a.vars):
+    if val:
+      s.emit_always( var)
+    else:
+      s.emit_never( var)
+
+  if tally % 2 == 1:
+    s.emit_always(z.var())
+  else:
+    s.emit_never(z.var())
+
+  s.emit_xor( a.vars, z.var())
+  s.solve()
+  assert s.state == 'SAT'
+
+@given(st.lists(st.booleans()))
+@example([True,True,True])
+@example([True,False,True])
+def test_majority_hypothesis(lst):
+  s = Tally()
+  mgr = VarMgr( s)
+  a = mgr.add_var( BitVec( s, 'a', len(lst)))
+  z = mgr.add_var( BitVar( s, 'z'))
+
+  tally = len([v for v in lst if v])
+  true_tallys = list(range( (len(lst)+1)//2, len(lst)+1))
+  print("majority lst:", lst, tally, true_tallys)
+
+  for (val,var) in zip(lst,a.vars):
+    if val:
+      s.emit_always( var)
+    else:
+      s.emit_never( var)
+
+  if tally in true_tallys:
+    s.emit_always(z.var())
+  else:
+    s.emit_never(z.var())
+
+  s.emit_symmetric( true_tallys, a.vars, z.var())
   s.solve()
   assert s.state == 'SAT'
