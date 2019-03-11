@@ -9,6 +9,9 @@ Builds a docker container, and runs pytest within it.
 
 [![Codacy Badge](https://api.codacy.com/project/badge/Grade/e4676c0c889a43c392967440fc7cd41f)](https://www.codacy.com/app/stevenmburns/circleci-test?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevenmburns/circleci-test&amp;utm_campaign=Badge_Grade)
 [![Codacy Badge](https://api.codacy.com/project/badge/Coverage/e4676c0c889a43c392967440fc7cd41f)](https://www.codacy.com/app/stevenmburns/circleci-test?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=stevenmburns/circleci-test&amp;utm_campaign=Badge_Coverage)
+
+## Codecov
+
 [![codecov](https://codecov.io/gh/stevenmburns/circleci-test/branch/master/graph/badge.svg)](https://codecov.io/gh/stevenmburns/circleci-test)
 
 ## Coveralls
