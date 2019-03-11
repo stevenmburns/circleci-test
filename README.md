@@ -16,6 +16,7 @@ Builds a docker container, and runs pytest within it.
 
 ## Coveralls
 
-[![Coverage Status](https://coveralls.io/repos/github/stevenmburns/circleci-test/badge.svg)](https://coveralls.io/github/stevenmburns/circleci-test)
+[![Coverage Status](https://coveralls.io/repos/github/stevenmburns/circleci-test/badge.svg?branch=)](https://coveralls.io/github/stevenmburns/circleci-test?branch=)
+
 
 ### Codacy coverage working, coveralls working but badge is incorrect, codecov is now working --- Hmm
