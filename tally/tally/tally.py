@@ -212,10 +212,21 @@ class Tally:
       elif i < len(a):
         self.emit_and( [outs[i-1],Tally.neg(outs[i])], tmp)
       else:
-        self.emit_and( [outs[i-1]], tmp)
+        self.emit_equiv( outs[i-1], tmp)
       toOr.append( tmp)
 
     self.emit_or( toOr, z)
+
+
+  def emit_majority( self, a, z):
+    outs = [self.add_var() for i in range(len(a))]
+    self.emit_tally( a, outs)
+
+    mid = (len(a)+1)//2
+    if mid > 0:
+      self.emit_equiv( outs[mid-1], z)
+    else:
+      self.emit_always( z)
 
 
   def emit_tally( self, inps, outs):
