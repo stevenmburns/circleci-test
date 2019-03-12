@@ -11,9 +11,10 @@ def fact(n):
     return n*fact(n-1)
 
 @given(st.integers(1,8))
+@example(1)
 def test_no_duplicates(n):
   v = list(range(1,n+1))
-  lst = list(knuth_lexical_permute(v))    
+  lst = list(knuth_lexical_permute(v))
 
   for vv in lst:
     vv.sort()
@@ -27,7 +28,7 @@ def test_duplicates(dups):
 
   v = []
   for (idx,i) in enumerate(dups):
-    for j in range(i):
+    for _ in range(i):
       v.append( idx+1)
 
   if len(v) == 0: return
@@ -42,15 +43,13 @@ def test_duplicates(dups):
     tbl[x] += 1
 
   prod = fact(len(v))
-  for (k,d) in tbl.items():
+  for (_,d) in tbl.items():
     prod //= fact(d)
 
-  lst = list(knuth_lexical_permute(v))    
+  lst = list(knuth_lexical_permute(v))
 
   assert len(lst) == prod
 
   for vv in lst:
     vv.sort()
     assert v == vv
-
-
