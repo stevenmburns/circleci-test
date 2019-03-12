@@ -1,0 +1,4 @@
+.hypothesis/
+.eggs/
+build/
+junit.xml
