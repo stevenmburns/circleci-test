@@ -119,7 +119,7 @@ def test_xnor_hypothesis(lst):
 @given(st.lists(st.booleans()))
 @example([True,True,True])
 @example([True,False,True])
-def test_majority_hypothesis(lst):
+def test_symmetric_hypothesis(lst):
   s = Tally()
   mgr = VarMgr( s)
   a = mgr.add_var( BitVec( s, 'a', len(lst)))
@@ -141,5 +141,33 @@ def test_majority_hypothesis(lst):
     s.emit_never(z.var())
 
   s.emit_symmetric( true_tallys, a.vars, z.var())
+  s.solve()
+  assert s.state == 'SAT'
+
+@given(st.lists(st.booleans()))
+@example([])
+@example([True,True,True])
+@example([True,False,True])
+def test_majority_hypothesis(lst):
+  s = Tally()
+  mgr = VarMgr( s)
+  a = mgr.add_var( BitVec( s, 'a', len(lst)))
+  z = mgr.add_var( BitVar( s, 'z'))
+
+  tally = len([v for v in lst if v])
+  print("majority lst:", lst, tally)
+
+  for (val,var) in zip(lst,a.vars):
+    if val:
+      s.emit_always( var)
+    else:
+      s.emit_never( var)
+
+  if tally >= (len(lst)+1)//2:
+    s.emit_always(z.var())
+  else:
+    s.emit_never(z.var())
+
+  s.emit_majority( a.vars, z.var())
   s.solve()
   assert s.state == 'SAT'
