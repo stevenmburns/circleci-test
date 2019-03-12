@@ -1,4 +1,4 @@
-FROM stevenmburns/tally_image as enumerate_image
+FROM stevenmburns/pysat_image:2019mar08 as enumerate_image
 
 COPY enumerate/ /enumerate/
 

@@ -20,7 +20,7 @@ jobs:
 
       - run: |
           docker build -f Dockerfile.enumerate -t stevenmburns/enumerate_image .
-          docker run --mount source=testVol,target=/test-reports --mount source=coverageVol,target=/coverage-reports stevenmburns/enumerate_image bash -c "source /general/bin/activate && cd enumerate && coverage run --source=enumerate,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && mkdir /test-reports/enumerate && cp /enumerate/junit.xml /test-reports/enumerate && mkdir /coverage-reports/enumerate && cp -r /enumerate/.coverage /enumerate/htmlcov /coverage-reports/sgi"
+          docker run --mount source=testVol,target=/test-reports --mount source=coverageVol,target=/coverage-reports stevenmburns/enumerate_image bash -c "source /general/bin/activate && cd enumerate && coverage run --source=enumerate,tests setup.py test && coverage html && coverage-badge -o htmlcov/coverage.svg && mkdir /test-reports/enumerate && cp /enumerate/junit.xml /test-reports/enumerate && mkdir /coverage-reports/enumerate && cp -r /enumerate/.coverage /enumerate/htmlcov /coverage-reports/enumerate"
 
       - run: |
           docker run -e CODACY_PROJECT_TOKEN -e CIRCLE_SHA1 --name coverage-container --mount source=coverageVol,target=/coverage-reports stevenmburns/sgi_image bash -c "source /general/bin/activate && cd coverage-reports && coverage combine sgi/.coverage tally/.coverage enumerate/.coverage && cd .. && cd coverage-reports && coverage xml && cd .. && python-codacy-coverage -r coverage-reports/coverage.xml -c $CIRCLE_SHA1 -d /"
