@@ -1,0 +1,19 @@
+FROM stevenmburns/tally_image as enumerate_image
+
+COPY enumerate/ /enumerate/
+
+RUN \
+    bash -c "source general/bin/activate && cd /enumerate/ && pip install ."
+
+
+
+
+
+
+
+
+
+
+
+
+
